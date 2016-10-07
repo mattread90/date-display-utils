@@ -1,26 +1,73 @@
 class DateUtils {
   constructor(options) {
-    if (options.separators.date) {
-      this._separators.date = options.separators.date;
+    if (options) {
+      if (options.separators.date) {
+        this._separators.date = options.separators.date;
+      } else {
+        this._separators.date = defaultDateSeparator;
+      }
+
+      if (options.separators.time) {
+        this._separators.time = options.separators.time;
+      } else {
+        this._separators.time = defaultTimeSeparator;
+      }
+    }
+  }
+
+}
+
+class Day {
+  constructor(day) {
+    var dayIndex;
+    if (typeof day !== Number) {
+      dayIndex = parseInt(day);
+      if (isNaN(dayIndex) || typeof dayIndex === undefined) {
+        throw 'Argument to Day constructor must be a parsable integer (0-6)';
+      }
     } else {
-      this._separators.date = defaultDateSeparator;
+      dayIndex = day;
     }
 
-    if (options.separators.time) {
-      this._separators.time = options.separators.time;
-    } else {
-      this._separators.time = defaultTimeSeparator;
+    if (dayIndex < 0 || dayIndex > 6) {
+      throw 'Day index out of range (0-6)';
     }
+
+    this.day = dayIndex;
+  }
+
+  static asLong(day) {
+    return new Day(day).asLong();
+  }
+
+  asLong() {
+    return daysTextLong[this.day];
+  }
+
+  static asShort(day) {
+    return new Day(day).asShort();
+  }
+
+  asShort() {
+    return daysTextShort[this.day];
+  }
+
+  static asShortest(day) {
+    return new Day(day).asShortest();
+  }
+
+  asShortest() {
+    return daysTextShortest[this.day];
   }
 }
 
 class Month {
   constructor(month) {
     var monthIndex;
-    if (typeof month !== Number) {
+    if (typeof month !== 'number') {
       monthIndex = parseInt(month);
-      if (typeof monthIndex === undefined) {
-        throw 'Argument to Month constructor must be a parsable integer (0-11)';
+      if (isNaN(monthIndex) || typeof monthIndex === undefined) {
+        throw 'Argument to Day constructor must be a parsable integer (0-11)';
       }
     } else {
       monthIndex = month;
@@ -33,16 +80,32 @@ class Month {
     this.month = monthIndex;
   }
 
-  asShort() {
-    return monthsTextShort[this.month];
+  static asLong(month) {
+    return new Month(month).asLong();
   }
 
   asLong() {
     return monthsTextLong[this.month];
   }
 
+  static asShort(month) {
+    return new Month(month).asShort();
+  }
+
+  asShort() {
+    return monthsTextShort[this.month];
+  }
+
+  static asNumber(month) {
+    return new Month(month).asNumber();
+  }
+
   asNumber() {
     return (this.month + 1).toString();
+  }
+
+  static asZeroFilledNumber(month) {
+    return new Month(month).asZeroFilledNumber();
   }
 
   asZeroFilledNumber() {
@@ -55,17 +118,60 @@ class Month {
   }
 }
 
+class Year {
+  constructor(year) {
+    if (typeof year == 'number') {
+      this.year = JS_DATE_START_YEAR_INDEX + year;
+    } else {
+      let yearInt = parseInt(year);
+      if (isNaN(yearInt) || typeof yearInt === undefined) {
+        throw 'Argument to Year constructor must be a parsable integer';
+      }
+      // If passed a string, it's probably the actual year in short or full form
+      if (yearInt > 0) {
+        if (yearInt < 100) {
+          this.year = 2000 + yearInt;
+        } else {
+          this.year = yearInt;
+        }
+      } else {
+        throw 'Not sure what to do with this arugment to Year constructor: '
+                + year;
+      }
+    }
+  }
+
+  static asLong(year) {
+    return new Year(year).asLong();
+  }
+
+  asLong() {
+    return this.year.toString();
+  }
+
+  static asShort(year) {
+    return new Year(year).asShort();
+  }
+
+  asShort() {
+    return this.year.toString().substr(2,4);
+  }
+}
+
+const JS_DATE_START_YEAR_INDEX = 1900;
+
 const defaultDateSeparator = '-';
 const defaultTimeSeparator = ':';
 
-const monthsTextShort = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL',
-        'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 const monthsTextLong = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
         'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+const monthsTextShort = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL',
+        'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-const daysTextShort = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const daysTextLong = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY',
         'FRIDAY', 'SATURDAY'];
+const daysTextShort = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const daysTextShortest = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
 
 module.exports.default = DateUtils;
-module.exports = { Month };
+module.exports = { Day, Month, Year };
