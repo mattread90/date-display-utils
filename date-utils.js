@@ -1,4 +1,4 @@
-class DateUtils {
+export default class DateUtils {
   constructor(options) {
     if (options) {
       if (options.separators.date) {
@@ -15,9 +15,22 @@ class DateUtils {
     }
   }
 
-}
+  static day(day) {
+    return new Day(day);
+  }
 
-class Day {
+  static month(month) {
+    return new Month(month);
+  }
+
+  static year(year) {
+    return new Year(year);
+  }
+}
+// Utility references:
+DateUtils.fromIndex = DateUtils;
+
+export class Day {
   constructor(day) {
     var dayIndex;
     if (typeof day !== Number) {
@@ -61,7 +74,7 @@ class Day {
   }
 }
 
-class Month {
+export class Month {
   constructor(month) {
     var monthIndex;
     if (typeof month !== 'number') {
@@ -118,7 +131,7 @@ class Month {
   }
 }
 
-class Year {
+export class Year {
   constructor(year) {
     if (typeof year == 'number') {
       this.year = JS_DATE_START_YEAR_INDEX + year;
@@ -172,6 +185,3 @@ const daysTextLong = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY',
         'FRIDAY', 'SATURDAY'];
 const daysTextShort = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const daysTextShortest = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
-
-module.exports.default = DateUtils;
-module.exports = { Day, Month, Year };

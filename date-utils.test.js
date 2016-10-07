@@ -1,7 +1,21 @@
 import DateUtils, { Day, Month, Year } from './date-utils';
 
 describe('DateUtils', () => {
+  it('can convert days, months and years to different formats', () => {
+    expect(DateUtils.day(1).asLong()).toBe('MONDAY');
+    expect(DateUtils.day(1).asShort()).toBe('MON');
+    expect(DateUtils.day(1).asShortest()).toBe('M');
 
+    expect(DateUtils.month(1).asLong()).toBe('FEBRUARY');
+    expect(DateUtils.month(1).asShort()).toBe('FEB');
+    expect(DateUtils.month(1).asNumber()).toBe('2');
+    expect(DateUtils.month(1).asZeroFilledNumber()).toBe('02');
+
+    expect(DateUtils.year(116).asLong()).toBe('2016');
+    expect(DateUtils.year(116).asShort()).toBe('16');
+    expect(DateUtils.year('2016').asLong()).toBe('2016');
+    expect(DateUtils.year('16').asLong()).toBe('2016');
+  });
 });
 
 describe('Day', () => {
