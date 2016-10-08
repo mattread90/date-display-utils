@@ -19,12 +19,28 @@ describe('DateUtils', () => {
 });
 
 describe('DisplayDate', () => {
-  it('does a job', () => {
+  it('can be used to convert various input dates to various output dates', () => {
     let oct2016 = new DisplayDate('2016-10');
     expect(oct2016
         .as((d, m, y) => `${m.asLong()}, ${y.asLong()}`)).toBe('OCTOBER, 2016');
     expect(oct2016
         .as((d, m, y) => `${m.asShort()} ${y.asShort()}`)).toBe('OCT 16');
+
+    let nov2016 = new DisplayDate('November, 2016');
+    expect(nov2016.as((d, m, y) => `${m.asZeroFilledNumber()}/${y.asShort()}`))
+      .toBe('11/16');
+    expect(nov2016.as((d, m, y) => `${m.asShort()} '${y.asShort()}`))
+      .toBe('NOV \'16');
+  });
+
+  it('can be used to compare dates by month', () => {
+    let oct2016 = new DisplayDate('2016-10');
+    let nov2016 = new DisplayDate('2016-11');
+    expect(DisplayDate.compareByMonth(oct2016, nov2016)).toBeLessThan(0);
+
+    let christmas = new DisplayDate('2016-12-25');
+    let newYear = new DisplayDate('12/31/2016');
+    expect(DisplayDate.compareByMonth(christmas, newYear)).toBe(0);
   });
 });
 

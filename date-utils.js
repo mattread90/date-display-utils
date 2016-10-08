@@ -26,11 +26,16 @@ export default class DateUtils {
   static year(year) {
     return new Year(year);
   }
+
+  static display(dateString) {
+    return new DisplayDate(dateString);
+  }
 }
 
 export class DisplayDate {
-  constructor(dateString) {
+  constructor(dateString, outputFunction) {
     this.date = new Date(dateString);
+    this.outputFunction = outputFunction;
   }
 
   static as(dateString, outputFunction) {
@@ -38,10 +43,42 @@ export class DisplayDate {
   }
 
   as(outputFunction) {
+    return this._output(this.date, outputFunction);
+  }
+
+  get() {
+    return this._output(this.date, this.outputFunction);
+  }
+
+  _output(date, outputFunction) {
     const d = this.date;
-    return outputFunction(new Month(d.getMonth()), new Year(d.getYear()));
+    return outputFunction(
+      new Day(d.getDay()), new Month(d.getMonth()), new Year(d.getYear()),
+      d.getHours(), d.getMinutes()
+    );
+  }
+
+  static compareByMonth(displayDate1, displayDate2) {
+    if (typeof displayDate1 === 'string')
+      displayDate1 = new DisplayDate(displayDate1);
+    if (typeof displayDate2 === 'string')
+      displayDate2 = new DisplayDate(displayDate2);
+    let comparable1 = displayDate1.as(DisplayDate.comparableOutputs.yearMonth);
+    let comparable2 = displayDate2.as(DisplayDate.comparableOutputs.yearMonth);
+    if (comparable1 < comparable2) {
+      return -1;
+    } else if (comparable1 === comparable2) {
+      return 0;
+    } else {
+      return 1;
+    }
   }
 }
+
+DisplayDate.comparableOutputs = {
+  yearMonth: (d, m, y) => `${y.asLong()}${m.asZeroFilledNumber()}`,
+  year: (d, m, y) => `${y.asLong()}`
+};
 
 export class Day {
   constructor(day) {
