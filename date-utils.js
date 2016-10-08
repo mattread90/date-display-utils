@@ -141,6 +141,23 @@ export class DayOfMonth {
     }
     return dayString;
   }
+
+  withSuffix() {
+    return this.asNumber() + this.justSuffix();
+  }
+
+  justSuffix() {
+    const text = this.asNumber();
+    if (text.endsWith('1') && text !== '11') {
+      return 'st';
+    } else if (text.endsWith('2') && text !== '12') {
+      return 'nd';
+    } else if (text.endsWith('3') && text !== '13') {
+      return 'rd';
+    } else {
+      return 'th';
+    }
+  }
 }
 
 export class Month {

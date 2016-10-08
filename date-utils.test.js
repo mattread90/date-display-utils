@@ -1,4 +1,4 @@
-import DateUtils, { DayOfWeek, Month, Year, DisplayDate } from './date-utils';
+import DateUtils, { DayOfWeek, DayOfMonth, Month, Year, DisplayDate } from './date-utils';
 
 describe('DateUtils', () => {
   it('can convert days, months and years to different formats', () => {
@@ -39,6 +39,11 @@ describe('DisplayDate', () => {
       if (dm.asNumber() === '25' && m.asNumber() === '12') return 'OMG Santa!';
     }))
       .toBe('OMG Santa!');
+
+    let starWarsDay = new DisplayDate('2016-05-4');
+    expect(starWarsDay.as((dw, dm, m) =>
+            `${m.asLong()} the ${dm.withSuffix()} be with you`))
+      .toBe('MAY the 4th be with you');
   });
 
   it('can be used to compare dates by month', () => {
@@ -143,6 +148,44 @@ describe('DayOfWeek', () => {
     expect(DayOfWeek.asLong(6)).toBe('SATURDAY');
     expect(DayOfWeek.asShort(6)).toBe('SAT');
     expect(DayOfWeek.asShortest(6)).toBe('Sa');
+  });
+});
+
+describe('DayOfMonth', () => {
+  it('can display the dates with st suffix', () => {
+    let first = new DayOfMonth(1);
+    let twentyFirst = new DayOfMonth(21);
+    let thirtyFirst = new DayOfMonth(31);
+    expect(first.withSuffix()).toBe('1st');
+    expect(twentyFirst.withSuffix()).toBe('21st');
+    expect(thirtyFirst.withSuffix()).toBe('31st');
+  });
+
+  it('can display the dates with nd suffix', () => {
+    let second = new DayOfMonth(2);
+    let twentySecond = new DayOfMonth(22);
+    expect(second.withSuffix()).toBe('2nd');
+    expect(twentySecond.withSuffix()).toBe('22nd');
+  });
+
+  it('can display the dates with rd suffix', () => {
+    let third = new DayOfMonth(3);
+    let twentyThird = new DayOfMonth(23);
+    expect(third.withSuffix()).toBe('3rd');
+    expect(twentyThird.withSuffix()).toBe('23rd');
+  });
+
+  it('can display the dates with th suffix', () => {
+    let thDates = [];
+    for (let i = 4; i < 31; i++) {
+      if (![1, 2, 3, 21, 22, 23, 31].includes(i)) {
+        thDates.push(i);
+      }
+    }
+    for (let date of thDates) {
+      let toDisplay = new DayOfMonth(date);
+      expect(toDisplay.justSuffix()).toBe('th');
+    }
   });
 });
 
