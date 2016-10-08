@@ -1,10 +1,10 @@
-import DateUtils, { Day, Month, Year, DisplayDate } from './date-utils';
+import DateUtils, { DayOfWeek, Month, Year, DisplayDate } from './date-utils';
 
 describe('DateUtils', () => {
   it('can convert days, months and years to different formats', () => {
-    expect(DateUtils.day(1).asLong()).toBe('MONDAY');
-    expect(DateUtils.day(1).asShort()).toBe('MON');
-    expect(DateUtils.day(1).asShortest()).toBe('M');
+    expect(DateUtils.dayOfWeek(1).asLong()).toBe('MONDAY');
+    expect(DateUtils.dayOfWeek(1).asShort()).toBe('MON');
+    expect(DateUtils.dayOfWeek(1).asShortest()).toBe('M');
 
     expect(DateUtils.month(1).asLong()).toBe('FEBRUARY');
     expect(DateUtils.month(1).asShort()).toBe('FEB');
@@ -44,18 +44,18 @@ describe('DisplayDate', () => {
   });
 });
 
-describe('Day', () => {
+describe('DayOfWeek', () => {
   it('can be constructed with zero-indexed integer', () => {
-    let sunday = new Day(0);
+    let sunday = new DayOfWeek(0);
     expect(sunday.day).toBe(0);
-    let saturday = new Day(6);
+    let saturday = new DayOfWeek(6);
     expect(saturday.day).toBe(6);
   });
 
   it('can be constructed with a parsable string', () => {
-    let sunday = new Day('0');
+    let sunday = new DayOfWeek('0');
     expect(sunday.day).toBe(0);
-    let saturday = new Day('6');
+    let saturday = new DayOfWeek('6');
     expect(saturday.day).toBe(6);
   });
 
@@ -63,12 +63,12 @@ describe('Day', () => {
     var tooSmallExceptionThrown = false;
     var tooBigExceptionThrown = false;
     try {
-      var tooSmall = new Day(-1); //eslint-disable-line no-unused-vars
+      var tooSmall = new DayOfWeek(-1); //eslint-disable-line no-unused-vars
     } catch (e) {
       tooSmallExceptionThrown = true;
     }
     try {
-      var tooBig = new Day(7); //eslint-disable-line no-unused-vars
+      var tooBig = new DayOfWeek(7); //eslint-disable-line no-unused-vars
     } catch (e) {
       tooBigExceptionThrown = true;
     }
@@ -82,12 +82,12 @@ describe('Day', () => {
     var tooSmallExceptionThrown = false;
     var tooBigExceptionThrown = false;
     try {
-      var tooSmall = new Day('-1'); //eslint-disable-line no-unused-vars
+      var tooSmall = new DayOfWeek('-1'); //eslint-disable-line no-unused-vars
     } catch (e) {
       tooSmallExceptionThrown = true;
     }
     try {
-      var tooBig = new Day('7'); //eslint-disable-line no-unused-vars
+      var tooBig = new DayOfWeek('7'); //eslint-disable-line no-unused-vars
     } catch (e) {
       tooBigExceptionThrown = true;
     }
@@ -98,43 +98,43 @@ describe('Day', () => {
   });
 
   it('displays correct days in different forms', () => {
-    let sunday = new Day(0);
+    let sunday = new DayOfWeek(0);
     expect(sunday.asLong()).toBe('SUNDAY');
     expect(sunday.asShort()).toBe('SUN');
     expect(sunday.asShortest()).toBe('Su');
 
-    let monday = new Day(1);
+    let monday = new DayOfWeek(1);
     expect(monday.asLong()).toBe('MONDAY');
     expect(monday.asShort()).toBe('MON');
     expect(monday.asShortest()).toBe('M');
 
-    let thursday = new Day(4);
+    let thursday = new DayOfWeek(4);
     expect(thursday.asLong()).toBe('THURSDAY');
     expect(thursday.asShort()).toBe('THU');
     expect(thursday.asShortest()).toBe('Th');
 
-    let saturday = new Day(6);
+    let saturday = new DayOfWeek(6);
     expect(saturday.asLong()).toBe('SATURDAY');
     expect(saturday.asShort()).toBe('SAT');
     expect(saturday.asShortest()).toBe('Sa');
   });
 
   it('static functions work too', () => {
-    expect(Day.asLong(0)).toBe('SUNDAY');
-    expect(Day.asShort(0)).toBe('SUN');
-    expect(Day.asShortest(0)).toBe('Su');
+    expect(DayOfWeek.asLong(0)).toBe('SUNDAY');
+    expect(DayOfWeek.asShort(0)).toBe('SUN');
+    expect(DayOfWeek.asShortest(0)).toBe('Su');
 
-    expect(Day.asLong(1)).toBe('MONDAY');
-    expect(Day.asShort(1)).toBe('MON');
-    expect(Day.asShortest(1)).toBe('M');
+    expect(DayOfWeek.asLong(1)).toBe('MONDAY');
+    expect(DayOfWeek.asShort(1)).toBe('MON');
+    expect(DayOfWeek.asShortest(1)).toBe('M');
 
-    expect(Day.asLong(4)).toBe('THURSDAY');
-    expect(Day.asShort(4)).toBe('THU');
-    expect(Day.asShortest(4)).toBe('Th');
+    expect(DayOfWeek.asLong(4)).toBe('THURSDAY');
+    expect(DayOfWeek.asShort(4)).toBe('THU');
+    expect(DayOfWeek.asShortest(4)).toBe('Th');
 
-    expect(Day.asLong(6)).toBe('SATURDAY');
-    expect(Day.asShort(6)).toBe('SAT');
-    expect(Day.asShortest(6)).toBe('Sa');
+    expect(DayOfWeek.asLong(6)).toBe('SATURDAY');
+    expect(DayOfWeek.asShort(6)).toBe('SAT');
+    expect(DayOfWeek.asShortest(6)).toBe('Sa');
   });
 });
 

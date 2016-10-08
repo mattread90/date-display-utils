@@ -15,8 +15,12 @@ export default class DateUtils {
     }
   }
 
-  static day(day) {
-    return new Day(day);
+  static display(dateString) {
+    return new DisplayDate(dateString);
+  }
+
+  static dayOfWeek(dayOfWeek) {
+    return new DayOfWeek(dayOfWeek);
   }
 
   static month(month) {
@@ -25,10 +29,6 @@ export default class DateUtils {
 
   static year(year) {
     return new Year(year);
-  }
-
-  static display(dateString) {
-    return new DisplayDate(dateString);
   }
 }
 
@@ -53,7 +53,7 @@ export class DisplayDate {
   _output(date, outputFunction) {
     const d = this.date;
     return outputFunction(
-      new Day(d.getDay()), new Month(d.getMonth()), new Year(d.getYear()),
+      new DayOfWeek(d.getDay()), new Month(d.getMonth()), new Year(d.getYear()),
       d.getHours(), d.getMinutes()
     );
   }
@@ -80,27 +80,27 @@ DisplayDate.comparableOutputs = {
   year: (d, m, y) => `${y.asLong()}`
 };
 
-export class Day {
+export class DayOfWeek {
   constructor(day) {
     var dayIndex;
     if (typeof day !== Number) {
       dayIndex = parseInt(day);
       if (isNaN(dayIndex) || typeof dayIndex === undefined) {
-        throw 'Argument to Day constructor must be a parsable integer (0-6)';
+        throw 'Argument to DayOfWeek constructor must be a parsable integer (0-6)';
       }
     } else {
       dayIndex = day;
     }
 
     if (dayIndex < 0 || dayIndex > 6) {
-      throw 'Day index out of range (0-6)';
+      throw 'DayOfWeek index out of range (0-6)';
     }
 
     this.day = dayIndex;
   }
 
   static asLong(day) {
-    return new Day(day).asLong();
+    return new DayOfWeek(day).asLong();
   }
 
   asLong() {
@@ -108,7 +108,7 @@ export class Day {
   }
 
   static asShort(day) {
-    return new Day(day).asShort();
+    return new DayOfWeek(day).asShort();
   }
 
   asShort() {
@@ -116,7 +116,7 @@ export class Day {
   }
 
   static asShortest(day) {
-    return new Day(day).asShortest();
+    return new DayOfWeek(day).asShortest();
   }
 
   asShortest() {
