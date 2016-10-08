@@ -53,10 +53,26 @@ export class DisplayDate {
   _output(date, outputFunction) {
     const d = this.date;
     return outputFunction(
-      new DayOfWeek(d.getDay()), new DayOfMonth(d.getDate()),
-      new Month(d.getMonth()), new Year(d.getYear()),
+      this.dayOfWeek(), this.dayOfMonth(),
+      this.month(), this.year(),
       d.getHours(), d.getMinutes()
     );
+  }
+
+  dayOfWeek() {
+    return new DayOfWeek(this.date.getDay());
+  }
+
+  dayOfMonth() {
+    return new DayOfMonth(this.date.getDate());
+  }
+
+  month() {
+    return new Month(this.date.getMonth());
+  }
+
+  year() {
+    return new Year(this.date.getYear());
   }
 
   static compareByMonth(displayDate1, displayDate2) {
