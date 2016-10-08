@@ -27,8 +27,21 @@ export default class DateUtils {
     return new Year(year);
   }
 }
-// Utility references:
-DateUtils.fromIndex = DateUtils;
+
+export class DisplayDate {
+  constructor(dateString) {
+    this.date = new Date(dateString);
+  }
+
+  static as(dateString, outputFunction) {
+    return new DisplayDate(dateString).as(outputFunction);
+  }
+
+  as(outputFunction) {
+    const d = this.date;
+    return outputFunction(new Month(d.getMonth()), new Year(d.getYear()));
+  }
+}
 
 export class Day {
   constructor(day) {

@@ -1,4 +1,4 @@
-import DateUtils, { Day, Month, Year } from './date-utils';
+import DateUtils, { Day, Month, Year, DisplayDate } from './date-utils';
 
 describe('DateUtils', () => {
   it('can convert days, months and years to different formats', () => {
@@ -15,6 +15,16 @@ describe('DateUtils', () => {
     expect(DateUtils.year(116).asShort()).toBe('16');
     expect(DateUtils.year('2016').asLong()).toBe('2016');
     expect(DateUtils.year('16').asLong()).toBe('2016');
+  });
+});
+
+describe('DisplayDate', () => {
+  it('does a job', () => {
+    let oct2016 = new DisplayDate('2016-10');
+    expect(oct2016
+        .as((d, m, y) => `${m.asLong()}, ${y.asLong()}`)).toBe('OCTOBER, 2016');
+    expect(oct2016
+        .as((d, m, y) => `${m.asShort()} ${y.asShort()}`)).toBe('OCT 16');
   });
 });
 
