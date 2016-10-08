@@ -2,12 +2,12 @@ import DateUtils, { DayOfWeek, DayOfMonth, Month, Year, DisplayDate } from './da
 
 describe('DateUtils', () => {
   it('can convert days, months and years to different formats', () => {
-    expect(DateUtils.dayOfWeek(1).asLong()).toBe('MONDAY');
-    expect(DateUtils.dayOfWeek(1).asShort()).toBe('MON');
+    expect(DateUtils.dayOfWeek(1).asLong()).toBe('Monday');
+    expect(DateUtils.dayOfWeek(1).asShort()).toBe('Mon');
     expect(DateUtils.dayOfWeek(1).asShortest()).toBe('M');
 
-    expect(DateUtils.month(1).asLong()).toBe('FEBRUARY');
-    expect(DateUtils.month(1).asShort()).toBe('FEB');
+    expect(DateUtils.month(1).asLong()).toBe('February');
+    expect(DateUtils.month(1).asShort()).toBe('Feb');
     expect(DateUtils.month(1).asNumber()).toBe('2');
     expect(DateUtils.month(1).asZeroFilledNumber()).toBe('02');
 
@@ -22,28 +22,36 @@ describe('DisplayDate', () => {
   it('can be used to convert various input dates to various output dates', () => {
     let oct2016 = new DisplayDate('2016-10');
     expect(oct2016
-        .as((dw, dm, m, y) => `${m.asLong()}, ${y.asLong()}`)).toBe('OCTOBER, 2016');
+        .as((dw, dm, m, y) => `${m.asLong()}, ${y.asLong()}`))
+        .toBe('October, 2016');
     expect(oct2016
-        .as((dw, dm, m, y) => `${m.asShort()} ${y.asShort()}`)).toBe('OCT 16');
+        .as((dw, dm, m, y) => `${m.asShort()} ${y.asShort()}`))
+        .toBe('Oct 16');
 
     let nov2016 = new DisplayDate('November, 2016');
-    expect(nov2016.as((dw, dm, m, y) => `${m.asZeroFilledNumber()}/${y.asShort()}`))
-      .toBe('11/16');
+    expect(nov2016.as((dw, dm, m, y) =>
+          `${m.asZeroFilledNumber()}/${y.asShort()}`))
+        .toBe('11/16');
     expect(nov2016.as((dw, dm, m, y) => `${m.asShort()} '${y.asShort()}`))
-      .toBe('NOV \'16');
+        .toBe('Nov \'16');
 
     let christmas = new DisplayDate('25 December 2016');
     expect(christmas.as((dw) => `Christmas is on a ${dw.asLong()}`))
-      .toBe('Christmas is on a SUNDAY');
+        .toBe('Christmas is on a Sunday');
     expect(christmas.as((dw, dm, m) => {
       if (dm.asNumber() === '25' && m.asNumber() === '12') return 'OMG Santa!';
     }))
-      .toBe('OMG Santa!');
+        .toBe('OMG Santa!');
 
     let starWarsDay = new DisplayDate('2016-05-4');
     expect(starWarsDay.as((dw, dm, m) =>
             `${m.asLong()} the ${dm.withSuffix()} be with you`))
-      .toBe('MAY the 4th be with you');
+      .toBe('May the 4th be with you');
+
+    let verySpecialDay = new DisplayDate('1990-12-09');
+    expect(verySpecialDay.as((dw, dm, m, y) =>
+      `${dw.asLong()} the ${dm.withSuffix()} of ${m.asLong()}, ${y.asLong()}`))
+      .toBe('Sunday the 9th of December, 1990');
   });
 
   it('can be used to compare dates by month', () => {
@@ -112,41 +120,41 @@ describe('DayOfWeek', () => {
 
   it('displays correct days in different forms', () => {
     let sunday = new DayOfWeek(0);
-    expect(sunday.asLong()).toBe('SUNDAY');
-    expect(sunday.asShort()).toBe('SUN');
+    expect(sunday.asLong()).toBe('Sunday');
+    expect(sunday.asShort()).toBe('Sun');
     expect(sunday.asShortest()).toBe('Su');
 
     let monday = new DayOfWeek(1);
-    expect(monday.asLong()).toBe('MONDAY');
-    expect(monday.asShort()).toBe('MON');
+    expect(monday.asLong()).toBe('Monday');
+    expect(monday.asShort()).toBe('Mon');
     expect(monday.asShortest()).toBe('M');
 
     let thursday = new DayOfWeek(4);
-    expect(thursday.asLong()).toBe('THURSDAY');
-    expect(thursday.asShort()).toBe('THU');
+    expect(thursday.asLong()).toBe('Thursday');
+    expect(thursday.asShort()).toBe('Thu');
     expect(thursday.asShortest()).toBe('Th');
 
     let saturday = new DayOfWeek(6);
-    expect(saturday.asLong()).toBe('SATURDAY');
-    expect(saturday.asShort()).toBe('SAT');
+    expect(saturday.asLong()).toBe('Saturday');
+    expect(saturday.asShort()).toBe('Sat');
     expect(saturday.asShortest()).toBe('Sa');
   });
 
   it('static functions work too', () => {
-    expect(DayOfWeek.asLong(0)).toBe('SUNDAY');
-    expect(DayOfWeek.asShort(0)).toBe('SUN');
+    expect(DayOfWeek.asLong(0)).toBe('Sunday');
+    expect(DayOfWeek.asShort(0)).toBe('Sun');
     expect(DayOfWeek.asShortest(0)).toBe('Su');
 
-    expect(DayOfWeek.asLong(1)).toBe('MONDAY');
-    expect(DayOfWeek.asShort(1)).toBe('MON');
+    expect(DayOfWeek.asLong(1)).toBe('Monday');
+    expect(DayOfWeek.asShort(1)).toBe('Mon');
     expect(DayOfWeek.asShortest(1)).toBe('M');
 
-    expect(DayOfWeek.asLong(4)).toBe('THURSDAY');
-    expect(DayOfWeek.asShort(4)).toBe('THU');
+    expect(DayOfWeek.asLong(4)).toBe('Thursday');
+    expect(DayOfWeek.asShort(4)).toBe('Thu');
     expect(DayOfWeek.asShortest(4)).toBe('Th');
 
-    expect(DayOfWeek.asLong(6)).toBe('SATURDAY');
-    expect(DayOfWeek.asShort(6)).toBe('SAT');
+    expect(DayOfWeek.asLong(6)).toBe('Saturday');
+    expect(DayOfWeek.asShort(6)).toBe('Sat');
     expect(DayOfWeek.asShortest(6)).toBe('Sa');
   });
 });
@@ -192,16 +200,16 @@ describe('DayOfMonth', () => {
 describe('Month', () => {
   it('can be constructed with zero-indexed integer', () => {
     let january = new Month(0);
-    expect(january.asLong()).toBe('JANUARY');
+    expect(january.asLong()).toBe('January');
     let december = new Month(11);
-    expect(december.asLong()).toBe('DECEMBER');
+    expect(december.asLong()).toBe('December');
   });
 
   it('can be constructed with a parsable string', () => {
     let january = new Month('0');
-    expect(january.asLong()).toBe('JANUARY');
+    expect(january.asLong()).toBe('January');
     let december = new Month('11');
-    expect(december.asLong()).toBe('DECEMBER');
+    expect(december.asLong()).toBe('December');
   });
 
   it('can\'t be constructed with zero-indexed integer outside of range', () => {
@@ -256,48 +264,48 @@ describe('Month', () => {
 
   it('displays correct months in different forms', () => {
     let january = new Month(0);
-    expect(january.asLong()).toBe('JANUARY');
-    expect(january.asShort()).toBe('JAN');
+    expect(january.asLong()).toBe('January');
+    expect(january.asShort()).toBe('Jan');
     expect(january.asNumber()).toBe('1');
     expect(january.asZeroFilledNumber()).toBe('01');
 
     let june = new Month(5);
-    expect(june.asLong()).toBe('JUNE');
-    expect(june.asShort()).toBe('JUN');
+    expect(june.asLong()).toBe('June');
+    expect(june.asShort()).toBe('Jun');
     expect(june.asNumber()).toBe('6');
     expect(june.asZeroFilledNumber()).toBe('06');
 
     let october = new Month(9);
-    expect(october.asLong()).toBe('OCTOBER');
-    expect(october.asShort()).toBe('OCT');
+    expect(october.asLong()).toBe('October');
+    expect(october.asShort()).toBe('Oct');
     expect(october.asNumber()).toBe('10');
     expect(october.asZeroFilledNumber()).toBe('10');
 
     let december = new Month(11);
-    expect(december.asLong()).toBe('DECEMBER');
-    expect(december.asShort()).toBe('DEC');
+    expect(december.asLong()).toBe('December');
+    expect(december.asShort()).toBe('Dec');
     expect(december.asNumber()).toBe('12');
     expect(december.asZeroFilledNumber()).toBe('12');
   });
 
   it('static functions work too', () => {
-    expect(Month.asLong(0)).toBe('JANUARY');
-    expect(Month.asShort(0)).toBe('JAN');
+    expect(Month.asLong(0)).toBe('January');
+    expect(Month.asShort(0)).toBe('Jan');
     expect(Month.asNumber(0)).toBe('1');
     expect(Month.asZeroFilledNumber(0)).toBe('01');
 
-    expect(Month.asLong(5)).toBe('JUNE');
-    expect(Month.asShort(5)).toBe('JUN');
+    expect(Month.asLong(5)).toBe('June');
+    expect(Month.asShort(5)).toBe('Jun');
     expect(Month.asNumber(5)).toBe('6');
     expect(Month.asZeroFilledNumber(5)).toBe('06');
 
-    expect(Month.asLong(9)).toBe('OCTOBER');
-    expect(Month.asShort(9)).toBe('OCT');
+    expect(Month.asLong(9)).toBe('October');
+    expect(Month.asShort(9)).toBe('Oct');
     expect(Month.asNumber(9)).toBe('10');
     expect(Month.asZeroFilledNumber(9)).toBe('10');
 
-    expect(Month.asLong(11)).toBe('DECEMBER');
-    expect(Month.asShort(11)).toBe('DEC');
+    expect(Month.asLong(11)).toBe('December');
+    expect(Month.asShort(11)).toBe('Dec');
     expect(Month.asNumber(11)).toBe('12');
     expect(Month.asZeroFilledNumber(11)).toBe('12');
   });
@@ -320,7 +328,7 @@ describe('Year', () => {
   it('can\'t be constructed with unparsable strings', () => {
     var exceptionThrown = false;
     try {
-      let notThisYear = new Year('yearOfTheHorse'); //eslint-disable-line no-unused-vars
+      let notReallyAYear = new Year('yearOfTheHorse'); //eslint-disable-line no-unused-vars
     } catch(e) {
       exceptionThrown = true;
     }

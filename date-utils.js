@@ -278,12 +278,12 @@ const JS_DATE_START_YEAR_INDEX = 1900;
 const defaultDateSeparator = '-';
 const defaultTimeSeparator = ':';
 
-const monthsTextLong = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
-        'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
-const monthsTextShort = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL',
-        'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const monthsTextLong = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+const monthsTextShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+        'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const daysTextLong = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY',
-        'FRIDAY', 'SATURDAY'];
-const daysTextShort = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const daysTextLong = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+        'Friday', 'Saturday'];
+const daysTextShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const daysTextShortest = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
