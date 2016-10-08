@@ -22,15 +22,23 @@ describe('DisplayDate', () => {
   it('can be used to convert various input dates to various output dates', () => {
     let oct2016 = new DisplayDate('2016-10');
     expect(oct2016
-        .as((d, m, y) => `${m.asLong()}, ${y.asLong()}`)).toBe('OCTOBER, 2016');
+        .as((dw, dm, m, y) => `${m.asLong()}, ${y.asLong()}`)).toBe('OCTOBER, 2016');
     expect(oct2016
-        .as((d, m, y) => `${m.asShort()} ${y.asShort()}`)).toBe('OCT 16');
+        .as((dw, dm, m, y) => `${m.asShort()} ${y.asShort()}`)).toBe('OCT 16');
 
     let nov2016 = new DisplayDate('November, 2016');
-    expect(nov2016.as((d, m, y) => `${m.asZeroFilledNumber()}/${y.asShort()}`))
+    expect(nov2016.as((dw, dm, m, y) => `${m.asZeroFilledNumber()}/${y.asShort()}`))
       .toBe('11/16');
-    expect(nov2016.as((d, m, y) => `${m.asShort()} '${y.asShort()}`))
+    expect(nov2016.as((dw, dm, m, y) => `${m.asShort()} '${y.asShort()}`))
       .toBe('NOV \'16');
+
+    let christmas = new DisplayDate('25 December 2016');
+    expect(christmas.as((dw) => `Christmas is on a ${dw.asLong()}`))
+      .toBe('Christmas is on a SUNDAY');
+    expect(christmas.as((dw, dm, m) => {
+      if (dm.asNumber() === '25' && m.asNumber() === '12') return 'OMG Santa!';
+    }))
+      .toBe('OMG Santa!');
   });
 
   it('can be used to compare dates by month', () => {

@@ -53,7 +53,8 @@ export class DisplayDate {
   _output(date, outputFunction) {
     const d = this.date;
     return outputFunction(
-      new DayOfWeek(d.getDay()), new Month(d.getMonth()), new Year(d.getYear()),
+      new DayOfWeek(d.getDay()), new DayOfMonth(d.getDate()),
+      new Month(d.getMonth()), new Year(d.getYear()),
       d.getHours(), d.getMinutes()
     );
   }
@@ -76,8 +77,8 @@ export class DisplayDate {
 }
 
 DisplayDate.comparableOutputs = {
-  yearMonth: (d, m, y) => `${y.asLong()}${m.asZeroFilledNumber()}`,
-  year: (d, m, y) => `${y.asLong()}`
+  yearMonth: (dw, dm, m, y) => `${y.asLong()}${m.asZeroFilledNumber()}`,
+  year: (dw, dm, m, y) => `${y.asLong()}`
 };
 
 export class DayOfWeek {
@@ -121,6 +122,24 @@ export class DayOfWeek {
 
   asShortest() {
     return daysTextShortest[this.day];
+  }
+}
+
+export class DayOfMonth {
+  constructor(dayOfMonth) {
+    this.dayOfMonth = dayOfMonth;
+  }
+
+  asNumber() {
+    return this.dayOfMonth.toString();
+  }
+
+  asZeroFilledNumber() {
+    let dayString = this.dayOfMonth.toString();
+    if (dayString < 10) {
+      dayString = '0' + dayString;
+    }
+    return dayString;
   }
 }
 
