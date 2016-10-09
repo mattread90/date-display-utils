@@ -331,6 +331,32 @@ export class Year {
   }
 }
 
+export class Hour {
+  constructor(hourIndex) {
+    this.hour = hourIndex;
+  }
+
+  as24hr() {
+    let hourText = (this.hour - 1).toString();
+    return this._pad(hourText);
+  }
+
+  as12hr() {
+    let hour = this.hour - 1;
+    if (hour > 12) hour -= 12;
+    return hour.toString();
+  }
+
+  getAMPM() {
+    return this.hour > 12 ? 'PM' : 'AM';
+  }
+
+  _pad(hourText) {
+    return hourText.length < 2 ? hourText = '0' + hourText
+                               : hourText;
+  }
+}
+
 const JS_DATE_START_YEAR_INDEX = 1900;
 
 const monthsTextLong = ['January', 'February', 'March', 'April', 'May', 'June',

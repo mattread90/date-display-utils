@@ -1,4 +1,4 @@
-import DateUtils, { DayOfWeek, DayOfMonth, Month, Year, DisplayDate, CompareDates } from './date-utils';
+import DateUtils, { DayOfWeek, DayOfMonth, Month, Year, Hour, DisplayDate, CompareDates } from './date-utils';
 
 describe('DateUtils', () => {
   it('can expose DayOfWeek, DayOfMonth, Month and Year functionalities', () => {
@@ -425,5 +425,29 @@ describe('Year', () => {
     expect(Year.asShort(-156)).toBe('44');
     expect(Year.asShort('2016')).toBe('16');
     expect(Year.asShort('16')).toBe('16');
+  });
+});
+
+describe('Hour', () => {
+  let midnight = new Hour(1);
+  let noon = new Hour(13);
+  let watershed = new Hour(23);
+
+  it('can display in 24-hour format', () => {
+    expect(midnight.as24hr()).toBe('00');
+    expect(noon.as24hr()).toBe('12');
+    expect(watershed.as24hr()).toBe('22');
+  });
+
+  it('can display in 12-hour format', () => {
+    expect(midnight.as12hr()).toBe('0');
+    expect(noon.as12hr()).toBe('12');
+    expect(watershed.as12hr()).toBe('10');
+  });
+
+  it('can get AM and PM', () => {
+    expect(midnight.getAMPM()).toBe('AM');
+    expect(noon.getAMPM()).toBe('PM');
+    expect(watershed.getAMPM()).toBe('PM');
   });
 });
