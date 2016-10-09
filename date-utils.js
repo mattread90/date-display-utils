@@ -211,6 +211,10 @@ export class DayOfWeek {
   asNumber() {
     return this.day;
   }
+
+  toString() {
+    return this.asLong();
+  }
 }
 
 export class DayOfMonth {
@@ -241,6 +245,10 @@ export class DayOfMonth {
     } else {
       return 'th';
     }
+  }
+
+  toString() {
+    return this.asNumber();
   }
 }
 
@@ -295,6 +303,10 @@ export class Month {
     const monthNum = this.month + 1;
     return _pad(monthNum.toString());
   }
+
+  toString() {
+    return this.asNumber();
+  }
 }
 
 export class Year {
@@ -335,6 +347,10 @@ export class Year {
   asShort() {
     return this.year.toString().substr(2,4);
   }
+
+  toString() {
+    return this.asLong();
+  }
 }
 
 export class Hour {
@@ -355,6 +371,10 @@ export class Hour {
 
   getAMPM() {
     return this.hour > 12 ? 'PM' : 'AM';
+  }
+
+  toString() {
+    return this.as24hr();
   }
 }
 
