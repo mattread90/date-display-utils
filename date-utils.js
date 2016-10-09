@@ -1,26 +1,18 @@
 export default class DateUtils {
-  constructor(options) {
-    if (options) {
-      if (options.separators.date) {
-        this._separators.date = options.separators.date;
-      } else {
-        this._separators.date = defaultDateSeparator;
-      }
-
-      if (options.separators.time) {
-        this._separators.time = options.separators.time;
-      } else {
-        this._separators.time = defaultTimeSeparator;
-      }
-    }
-  }
-
   static display(dateString) {
     return new DisplayDate(dateString);
   }
 
+  static compare(date1, date2) {
+    return new CompareDates(date1, date2);
+  }
+
   static dayOfWeek(dayOfWeek) {
     return new DayOfWeek(dayOfWeek);
+  }
+
+  static dayOfMonth(dayOfMonth) {
+    return new DayOfMonth(dayOfMonth);
   }
 
   static month(month) {
@@ -75,13 +67,80 @@ export class DisplayDate {
     return new Year(this.date.getYear());
   }
 
-  static compareByMonth(displayDate1, displayDate2) {
-    if (typeof displayDate1 === 'string')
-      displayDate1 = new DisplayDate(displayDate1);
-    if (typeof displayDate2 === 'string')
-      displayDate2 = new DisplayDate(displayDate2);
-    let comparable1 = displayDate1.as(DisplayDate.comparableOutputs.yearMonth);
-    let comparable2 = displayDate2.as(DisplayDate.comparableOutputs.yearMonth);
+  toString() {
+    return this.date.toString();
+  }
+}
+
+DateUtils.comparableOutputs = {
+  year: (dw, dm, m, y) => `${y.asLong()}`,
+  yearMonth: (dw, dm, m, y) => `${y.asLong()}${m.asZeroFilledNumber()}`,
+  day: (dw, dm, m , y) =>
+    `${y.asLong()}${m.asZeroFilledNumber()}-${dm.asZeroFilledNumber()}`,
+  minute: (dw, dm, m, y, h, mi) =>
+    `${DateUtils.comparableOutputs.day(dw, dm, m, y)} ${h}:${mi}`
+};
+
+export class CompareDates {
+  constructor(date1, date2, comparisonOutput) {
+    this.date1 = new DisplayDate(date1);
+    this.date2 = new DisplayDate(date2);
+    this.comparisonOutput = comparisonOutput;
+  }
+
+  do() {
+    return this.by();
+  }
+
+  by(comparisonOutput) {
+    if (comparisonOutput) {
+      return this._compare(comparisonOutput);
+    } else if (this.comparisonOutput) {
+      return this._compare(this.comparisonOutput);
+    } else {
+      let result =
+      this.date1.date < this.date2.date ? -1 :
+      this.date1.date > this.date2.date ?  1 :
+                                           0 ;
+      return result;
+    }
+  }
+
+  static byMinute(date1, date2) {
+    return new CompareDates(date1, date2).byMinute();
+  }
+
+  byMinute() {
+    return this._compare(DateUtils.comparableOutputs.minute);
+  }
+
+  static byDay(date1, date2) {
+    return new CompareDates(date1, date2).byDay();
+  }
+
+  byDay() {
+    return this._compare(DateUtils.comparableOutputs.day);
+  }
+
+  static byMonth(date1, date2) {
+    return new CompareDates(date1, date2).byMonth();
+  }
+
+  byMonth() {
+    return this._compare(DateUtils.comparableOutputs.yearMonth);
+  }
+
+  static byYear(date1, date2) {
+    return new CompareDates(date1, date2).byYear();
+  }
+
+  byYear() {
+    return this._compare(DateUtils.comparableOutputs.year);
+  }
+
+  _compare(comparisonOutput) {
+    let comparable1 = this.date1.as(comparisonOutput);
+    let comparable2 = this.date2.as(comparisonOutput);
     if (comparable1 < comparable2) {
       return -1;
     } else if (comparable1 === comparable2) {
@@ -91,11 +150,6 @@ export class DisplayDate {
     }
   }
 }
-
-DisplayDate.comparableOutputs = {
-  yearMonth: (dw, dm, m, y) => `${y.asLong()}${m.asZeroFilledNumber()}`,
-  year: (dw, dm, m, y) => `${y.asLong()}`
-};
 
 export class DayOfWeek {
   constructor(day) {
@@ -138,6 +192,10 @@ export class DayOfWeek {
 
   asShortest() {
     return daysTextShortest[this.day];
+  }
+
+  asNumber() {
+    return this.day;
   }
 }
 
@@ -274,9 +332,6 @@ export class Year {
 }
 
 const JS_DATE_START_YEAR_INDEX = 1900;
-
-const defaultDateSeparator = '-';
-const defaultTimeSeparator = ':';
 
 const monthsTextLong = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'];

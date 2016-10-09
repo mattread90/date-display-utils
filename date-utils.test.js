@@ -1,10 +1,15 @@
-import DateUtils, { DayOfWeek, DayOfMonth, Month, Year, DisplayDate } from './date-utils';
+import DateUtils, { DayOfWeek, DayOfMonth, Month, Year, DisplayDate, CompareDates } from './date-utils';
 
 describe('DateUtils', () => {
-  it('can convert days, months and years to different formats', () => {
+  it('can expose DayOfWeek, DayOfMonth, Month and Year functionalities', () => {
     expect(DateUtils.dayOfWeek(1).asLong()).toBe('Monday');
     expect(DateUtils.dayOfWeek(1).asShort()).toBe('Mon');
     expect(DateUtils.dayOfWeek(1).asShortest()).toBe('M');
+
+    expect(DateUtils.dayOfMonth(1).asNumber()).toBe('1');
+    expect(DateUtils.dayOfMonth(1).asZeroFilledNumber()).toBe('01');
+    expect(DateUtils.dayOfMonth(1).withSuffix()).toBe('1st');
+    expect(DateUtils.dayOfMonth(1).justSuffix()).toBe('st');
 
     expect(DateUtils.month(1).asLong()).toBe('February');
     expect(DateUtils.month(1).asShort()).toBe('Feb');
@@ -15,6 +20,16 @@ describe('DateUtils', () => {
     expect(DateUtils.year(116).asShort()).toBe('16');
     expect(DateUtils.year('2016').asLong()).toBe('2016');
     expect(DateUtils.year('16').asLong()).toBe('2016');
+  });
+
+  it('can expose DisplayDate functionality', () => {
+    expect(DateUtils.display('2016-10-09').as((dw, dm, m, y) =>
+      `${dw.asLong()} ${dm.withSuffix()} ${m.asLong()} ${y.asLong()}`))
+      .toBe('Sunday 9th October 2016');
+  });
+
+  it('can expose CompareDates functionality', () => {
+    expect(DateUtils.compare('2016-10-09', '2016-10-10').byMonth()).toBe(0);
   });
 });
 
@@ -53,15 +68,57 @@ describe('DisplayDate', () => {
       `${dw.asLong()} the ${dm.withSuffix()} of ${m.asLong()}, ${y.asLong()}`))
       .toBe('Sunday the 9th of December, 1990');
   });
+});
 
+describe('CompareDates', () => {
   it('can be used to compare dates by month', () => {
-    let oct2016 = new DisplayDate('2016-10');
-    let nov2016 = new DisplayDate('2016-11');
-    expect(DisplayDate.compareByMonth(oct2016, nov2016)).toBeLessThan(0);
+    expect(new CompareDates('2016-10', '2016-11').byMonth()).toBeLessThan(0);
+    expect(new CompareDates('2016-10-1', '2016-10-31').byMonth()).toBe(0);
+    expect(new CompareDates('2016-11', '2016-10').byMonth()).toBeGreaterThan(0);
+  });
 
-    let christmas = new DisplayDate('2016-12-25');
-    let newYear = new DisplayDate('12/31/2016');
-    expect(DisplayDate.compareByMonth(christmas, newYear)).toBe(0);
+  it('can be used to compare dates by year', () => {
+    expect(new CompareDates('2015-12-31', '2016-01-01').byYear()).toBeLessThan(0);
+    expect(new CompareDates('2016-01-01', '2016-12-31').byYear()).toBe(0);
+    expect(new CompareDates('2016-01-01', '2015-12').byYear()).toBeGreaterThan(0);
+  });
+
+  it('can be used to compare dates by day', () => {
+    expect(new CompareDates('2016-12-25', '2016-12-26').byDay()).toBeLessThan(0);
+    expect(new CompareDates('2016-12-25', '2016-12-25').byDay()).toBe(0);
+    expect(new CompareDates('2016-12-26', '2016-12-25').byDay()).toBeGreaterThan(0);
+  });
+
+  it('can be used to compare dates by minute', () => {
+    expect(new CompareDates('2016-12-25 12:00', '2016-12-25 12:01')
+                            .byMinute()).toBeLessThan(0);
+    expect(new CompareDates('2016-12-25 12:00', '2016-12-25 12:00')
+                            .byMinute()).toBe(0);
+    expect(new CompareDates('2016-12-25 12:01', '2016-12-25 12:00')
+                            .byMinute()).toBeGreaterThan(0);
+  });
+
+  it('can compare dates using custom outputs', () => {
+    let century = (dw, dm, m, y) => `${y.asLong().substr(0,2)}`;
+    expect(new CompareDates('2016-12-25', '1916-12-25').by(century))
+        .toBeGreaterThan(0);
+    expect(new CompareDates('2016-12-25', '2045-12-25').by(century))
+        .toBe(0);
+
+    let dayOfWeek = (dw) => `${dw.asNumber()}`;
+    // Both Sundays:
+    expect(new CompareDates('1990-12-09', '2016-10-09').by(dayOfWeek))
+        .toBe(0);
+  });
+
+  it('can simply compare the internal Date objects', () => {
+    let now = new Date();
+    let alsoNow = new Date(now);
+    expect(new CompareDates(now, alsoNow).do()).toBe(0);
+
+    let then = alsoNow.setMilliseconds(alsoNow.getMilliseconds() - 1);
+    expect(new CompareDates(now, then).do()).toBeGreaterThan(0);
+    expect(new CompareDates(then, now).do()).toBeLessThan(0);
   });
 });
 
