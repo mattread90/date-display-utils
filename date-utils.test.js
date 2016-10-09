@@ -68,6 +68,13 @@ describe('DisplayDate', () => {
       `${dw.asLong()} the ${dm.withSuffix()} of ${m.asLong()}, ${y.asLong()}`))
       .toBe('Sunday the 9th of December, 1990');
   });
+
+  it('lets user modify the time of day', () => {
+    let date = new DisplayDate('2016-10-09');
+    expect(date.as((dw, dm, m, y, h, mi) => `${h.as24hr()}:${mi}`)).toBe('00:00');
+    date.setTimeOfDay('17:45');
+    expect(date.as((dw, dm, m, y, h, mi) => `${h.as24hr()}:${mi}`)).toBe('17:45');
+  });
 });
 
 describe('CompareDates', () => {

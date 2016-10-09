@@ -43,12 +43,18 @@ export class DisplayDate {
   }
 
   _output(date, outputFunction) {
-    const d = this.date;
     return outputFunction(
       this.dayOfWeek(), this.dayOfMonth(),
       this.month(), this.year(),
-      d.getHours(), d.getMinutes()
+      this.hour(), this.minute()
     );
+  }
+
+  setTimeOfDay(time, separator) {
+    const sep = separator ? separator : ':';
+    const [hours, mins] = time.split(sep);
+    this.date.setHours(parseInt(hours) + 1);
+    this.date.setMinutes(mins);
   }
 
   dayOfWeek() {
@@ -65,6 +71,14 @@ export class DisplayDate {
 
   year() {
     return new Year(this.date.getYear());
+  }
+
+  hour() {
+    return new Hour(this.date.getHours());
+  }
+
+  minute() {
+    return new Minute(this.date.getMinutes());
   }
 
   toString() {
@@ -209,11 +223,7 @@ export class DayOfMonth {
   }
 
   asZeroFilledNumber() {
-    let dayString = this.dayOfMonth.toString();
-    if (dayString < 10) {
-      dayString = '0' + dayString;
-    }
-    return dayString;
+    return _pad(this.dayOfMonth.toString());
   }
 
   withSuffix() {
@@ -283,11 +293,7 @@ export class Month {
 
   asZeroFilledNumber() {
     const monthNum = this.month + 1;
-    let monthString = monthNum.toString();
-    if (monthNum < 10) {
-      monthString = '0' + monthString;
-    }
-    return monthString;
+    return _pad(monthNum.toString());
   }
 }
 
@@ -338,7 +344,7 @@ export class Hour {
 
   as24hr() {
     let hourText = (this.hour - 1).toString();
-    return this._pad(hourText);
+    return _pad(hourText);
   }
 
   as12hr() {
@@ -350,12 +356,27 @@ export class Hour {
   getAMPM() {
     return this.hour > 12 ? 'PM' : 'AM';
   }
+}
 
-  _pad(hourText) {
-    return hourText.length < 2 ? hourText = '0' + hourText
-                               : hourText;
+export class Minute {
+  constructor(minute) {
+    this.minute = minute;
+  }
+
+  asNumber() {
+    return _pad(this.minute);
+  }
+
+  toString() {
+    return this.asNumber();
   }
 }
+
+const _pad = (number) => {
+  if (typeof number !== 'string') number = number.toString();
+  if (number.length < 2) number = '0' + number;
+  return number;
+};
 
 const JS_DATE_START_YEAR_INDEX = 1900;
 
