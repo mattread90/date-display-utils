@@ -22,6 +22,12 @@ export default class DateUtils {
   static year(year) {
     return new Year(year);
   }
+
+  static combine(date, time) {
+    let combined = new DisplayDate(date);
+    combined.setTimeOfDay(time);
+    return combined;
+  }
 }
 
 export class DisplayDate {
@@ -51,6 +57,7 @@ export class DisplayDate {
   }
 
   setTimeOfDay(time, separator) {
+    if (!time) time = '00:00';
     const sep = separator ? separator : ':';
     const [hours, mins] = time.split(sep);
     this.date.setHours(parseInt(hours) + 1);
@@ -93,6 +100,12 @@ DateUtils.comparableOutputs = {
     `${y.asLong()}${m.asZeroFilledNumber()}-${dm.asZeroFilledNumber()}`,
   minute: (dw, dm, m, y, h, mi) =>
     `${DateUtils.comparableOutputs.day(dw, dm, m, y)} ${h}:${mi}`
+};
+
+DateUtils.comparators = {
+  byMonth: (d1, d2) => DateUtils.compare(d1, d2).byMonth(),
+  byDay: (d1, d2) => DateUtils.compare(d1, d2).byDay(),
+  byMinute: (d1, d2) => DateUtils.compare(d1, d2).byMinute()
 };
 
 export class CompareDates {
