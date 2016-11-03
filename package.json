@@ -1,0 +1,42 @@
+{
+  "name": "date-display-utils",
+  "version": "1.0.0",
+  "description": "JS module providing expressive output and comparison of dates in any format you like",
+  "main": "date-utils.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattread90/date-display-utils.git"
+  },
+  "keywords": [
+    "date",
+    "dates",
+    "month",
+    "year",
+    "day",
+    "time",
+    "am",
+    "pm"
+  ],
+  "author": "Matthew Read",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattread90/date-display-utils/issues"
+  },
+  "homepage": "https://github.com/mattread90/date-display-utils#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-jest": "^16.0.0",
+    "babel-preset-es2015": "^6.18.0",
+    "jest": "^16.0.2"
+  }
+}
