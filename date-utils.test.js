@@ -318,7 +318,6 @@ describe('Month', () => {
     var exceptionThrown = false;
     try {
       var notADate = new Month('Movember'); //eslint-disable-line no-unused-vars
-      console.log(notADate);
     } catch (e) {
       exceptionThrown = true;
     }
